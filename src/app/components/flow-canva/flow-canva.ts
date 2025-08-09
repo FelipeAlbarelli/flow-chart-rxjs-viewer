@@ -10,6 +10,7 @@ import {
 import {generateGuid} from '@foblex/utils';
 import { CanvaItem, canvaStore } from '../../model/canva.store';
 import { CommonModule } from '@angular/common';
+import { IPoint } from '@foblex/2d';
 
 @Component({
   selector: 'app-flow-canva',
@@ -32,6 +33,17 @@ export class FlowCanva {
   protected onLoaded(): void {
     this.fCanvas()?.resetScaleAndCenter(false);
     console.log('loaded')
+  }
+
+  nodeMoved = (event: IPoint, node: CanvaItem) => {
+    this.canvaStore.actions$.next({
+      type: "update",
+      id: node.id,
+      data: {
+        ...node,
+        position: event
+      }
+    })
   }
 
   createNode = (event: FCreateNodeEvent) => {

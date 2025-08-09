@@ -9,6 +9,7 @@
                 fNode
                 [fNodePosition]="node.position"
                 fDragHandle
+                (fNodePositionChange)="nodeMoved($event, node)"
             >
                 <span>
                     {{node.text}}
