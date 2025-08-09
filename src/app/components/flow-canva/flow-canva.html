@@ -1,5 +1,27 @@
-<f-flow fDraggable (fLoaded)="onLoaded()">
+<f-flow fDraggable (fLoaded)="onLoaded()" (fCreateNode)="createNode($event)">
     <f-background>
         <f-rect-pattern />
     </f-background>
+    <f-canvas fZoom>
+        @for (node of canvaItems(); track node.id) {
+            <div 
+                fNode
+                [fNodePosition]="node.position"
+                fDragHandle
+            >
+                {{node.text}}
+            </div>
+        }
+    </f-canvas>
 </f-flow>
+
+<div class="palette">
+    @for (item of palatteItems(); track item) {
+        <div class="palette-item"
+            fExternalItem
+            [fData]="item"
+        >
+            {{item}}
+        </div>
+    }
+</div>
