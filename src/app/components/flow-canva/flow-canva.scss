@@ -21,11 +21,27 @@
 
 .canva-item {
     display: flex;
-    cursor: grab;
     width: 160px;
     height: 60px;
     background-color: white;
     border: 1px solid blue;
+    align-items: center;
+    gap: 8px;
+    padding: 8px;
+
+    .text {
+        flex-grow: 1;
+        display: flex;
+        justify-content: center;
+    }
+}
+
+.drag-handle {
+    width: 20px;
+    height: 90%;
+    background-color: #d4d4d4;
+    display: flex;
+    cursor: move;
     align-items: center;
     justify-content: center;
 }

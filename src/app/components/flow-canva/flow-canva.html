@@ -8,10 +8,13 @@
                 class="canva-item"
                 fNode
                 [fNodePosition]="node.position"
-                fDragHandle
                 (fNodePositionChange)="nodeMoved($event, node)"
             >
-                <span>
+                <span 
+                    class="drag-handle"
+                    fDragHandle
+                ></span>
+                <span class="text">
                     {{node.text}}
                 </span>
                 <div 
