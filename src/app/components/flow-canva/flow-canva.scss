@@ -21,13 +21,26 @@
 
 .canva-item {
     display: flex;
-    width: 160px;
+    flex-direction: row;
+    gap: 4px;
     height: 60px;
+}
+
+.inputs,.outputs {
+    width: 20px;
+    height: 100%;
+    background-color: aqua;
+}
+
+.card{
+    display: flex;
+    width: 160px;
     background-color: white;
     border: 1px solid blue;
     align-items: center;
     gap: 8px;
     padding: 8px;
+    position: relative;
 
     .text {
         flex-grow: 1;

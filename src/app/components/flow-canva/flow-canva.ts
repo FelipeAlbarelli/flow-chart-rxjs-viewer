@@ -1,6 +1,7 @@
 import { Component, signal, viewChild } from '@angular/core';
 import {
   FCanvasComponent,
+  FCreateConnectionEvent,
   FCreateNodeEvent,
   FExternalItemDirective,
   FExternalItemPlaceholderDirective,
@@ -33,6 +34,10 @@ export class FlowCanva {
   protected onLoaded(): void {
     this.fCanvas()?.resetScaleAndCenter(false);
     console.log('loaded')
+  }
+
+  addConnection = (event: FCreateConnectionEvent) => {
+    console.log(event)
   }
 
   nodeMoved = (event: IPoint, node: CanvaItem) => {

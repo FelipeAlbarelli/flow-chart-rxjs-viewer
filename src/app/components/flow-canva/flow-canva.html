@@ -1,28 +1,47 @@
-<f-flow fDraggable (fLoaded)="onLoaded()" (fCreateNode)="createNode($event)">
+<f-flow fDraggable 
+    (fLoaded)="onLoaded()" 
+    (fCreateNode)="createNode($event)"
+    (fCreateConnection)="addConnection($event)"
+>
     <f-background>
         <f-rect-pattern />
     </f-background>
     <f-canvas fZoom>
+        <f-connection-for-create></f-connection-for-create>
         @for (node of (canvaItems$ | async); track node.id) {
             <div
                 class="canva-item"
                 fNode
                 [fNodePosition]="node.position"
                 (fNodePositionChange)="nodeMoved($event, node)"
+                fOutputConnectableSide="left"
+                fInputConnectableSide="right"
             >
-                <span 
-                    class="drag-handle"
-                    fDragHandle
-                ></span>
-                <span class="text">
-                    {{node.text}}
-                </span>
                 <div 
-                    class="btn-delete"
-                    (click)="$event.stopPropagation(); deleteNode(node)"
-                >
-                    x
+                    class="inputs"
+                    [fInputId]="node.id"
+                    fNodeInput
+                ></div>
+                <div class="card">
+                    <span 
+                        class="drag-handle"
+                        fDragHandle
+                    ></span>
+                    <span class="text">
+                        {{node.text}}
+                    </span>
+                    <div 
+                        class="btn-delete"
+                        (click)="$event.stopPropagation(); deleteNode(node)"
+                    >
+                        x
+                    </div>
                 </div>
+                <div 
+                    class="outputs"
+                    fNodeOutput
+                    [fOutputId]="node.id"
+                ></div>
             </div>
         }
     </f-canvas>
