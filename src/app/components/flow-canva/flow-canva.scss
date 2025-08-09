@@ -18,3 +18,14 @@
     background-color: white;
     border: 1px solid blue;
 }
+
+.canva-item {
+    display: flex;
+    cursor: grab;
+    width: 160px;
+    height: 60px;
+    background-color: white;
+    border: 1px solid blue;
+    align-items: center;
+    justify-content: center;
+}
