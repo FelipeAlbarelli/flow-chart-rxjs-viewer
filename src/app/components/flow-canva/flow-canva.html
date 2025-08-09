@@ -10,7 +10,15 @@
                 [fNodePosition]="node.position"
                 fDragHandle
             >
-                {{node.text}}
+                <span>
+                    {{node.text}}
+                </span>
+                <div 
+                    class="btn-delete"
+                    (click)="$event.stopPropagation(); deleteNode(node)"
+                >
+                    x
+                </div>
             </div>
         }
     </f-canvas>

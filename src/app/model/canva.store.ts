@@ -76,7 +76,6 @@ export const canvaStore = ({
 
     if (localStoreSync) {
         const dataFromStorage = getStateFromLocalStorage(localStoreKey);
-        console.log({dataFromStorage})
         if (dataFromStorage) {
             firstAction = {
                 type: "setStore",
@@ -110,10 +109,10 @@ export const canvaStore = ({
             }
         }, initialState ?? new Map<string, CanvaItem>()),
         tap(state => {
-            console.log(`canvaStore state changed`, state);
-            // if (localStoreSync) {
-            //     saveStateInLocalStore(localStoreKey, state);
-            // }
+            console.debug(`canvaStore state changed`, state);
+            if (localStoreSync) {
+                saveStateInLocalStorage(localStoreKey, state);
+            }
         }),
         share(),
     );

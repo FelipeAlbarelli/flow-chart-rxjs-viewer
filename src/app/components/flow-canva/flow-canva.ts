@@ -8,7 +8,7 @@ import {
   FFlowModule
 } from '@foblex/flow';
 import {generateGuid} from '@foblex/utils';
-import { canvaStore } from '../../model/canva.store';
+import { CanvaItem, canvaStore } from '../../model/canva.store';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -47,14 +47,13 @@ export class FlowCanva {
         position: event.rect,
       }
     })
-    // this.canvaItems.update(prev => [
-    //   ...prev,
-    //   {
-    //     id: generateGuid(),
-    //     text: event.data ?? `node ${prev.length + 1}`,
-    //     position: event.rect
-    //   }
-    // ])
+  }
+
+  deleteNode = (node: CanvaItem) => {
+    this.canvaStore.actions$.next({
+      type: "remove",
+      id: node.id
+    })
   }
 
 }

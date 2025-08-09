@@ -29,3 +29,17 @@
     align-items: center;
     justify-content: center;
 }
+
+.btn-delete {
+    cursor: pointer;
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    border: solid red 1px;
+    height: 20px;
+    color: red;
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
