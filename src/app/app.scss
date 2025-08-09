@@ -1,50 +1,18 @@
-.f-flow {
-  height: 400px;
+:host {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.f-node {
-  padding: 24px;
-  color: rgba(60, 60, 67);
-  text-align: center;
-  background: #ffffff;
-  border-radius: 2px;
-  border: 0.2px solid rgba(60, 60, 67);
-
-  &.f-selected {
-    border-color: #3451b2;
-    // Highlights the border when the node is selected
-    // The f-selected class is automatically added by the library when a node or connection is selected.
-  }
+.content {
+    border: solid black 1px;
+    width: 80%;
+    height: 80%;
+    // aspect-ratio: 4/3;
 }
 
-.f-drag-handle {
-  cursor: move;
-}
+app-dashboard {
 
-::ng-deep {
-  .f-connection {
-    .f-connection-drag-handle {
-      fill: transparent;
-      // By default, this element has a black fill and is used to detect the start of dragging (e.g., onmousedown).
-      // We make it transparent to avoid visual clutter, while keeping it functional.
-    }
-
-    .f-connection-selection {
-      stroke-width: 10;
-      // This is a pseudo-connection (a copy of the main path) used to make it easier to select the connection.
-      // It's slightly thicker than the actual path (which is often only 1px), making it easier to interact with.
-      // It remains invisible to avoid affecting visual clarity but stays active for user interaction.
-    }
-
-    .f-connection-path {
-      stroke: rgba(60, 60, 67);
-      stroke-width: 2;
-    }
-
-    &.f-selected {
-      .f-connection-path {
-        stroke: #3451b2;
-      }
-    }
-  }
 }
