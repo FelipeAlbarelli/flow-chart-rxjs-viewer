@@ -27,7 +27,7 @@ export class FlowCanva {
     "A", "B" , "C" , "D" , "E"
   ])
 
-  canvaItems$ = this.canvaStore.items$
+  canvaItems$ = this.canvaStore.nodes$
 
   protected fCanvas = viewChild(FCanvasComponent);
 
@@ -41,7 +41,7 @@ export class FlowCanva {
   }
 
   nodeMoved = (event: IPoint, node: CanvaItem) => {
-    this.canvaStore.actions$.next({
+    this.canvaStore.nodeActions$.next({
       type: "update",
       id: node.id,
       data: {
@@ -52,7 +52,7 @@ export class FlowCanva {
   }
 
   createNode = (event: FCreateNodeEvent) => {
-    this.canvaStore.actions$.next({
+    this.canvaStore.nodeActions$.next({
       type: "add",
       data: {
         id: generateGuid(),
@@ -67,7 +67,7 @@ export class FlowCanva {
   }
 
   deleteNode = (node: CanvaItem) => {
-    this.canvaStore.actions$.next({
+    this.canvaStore.nodeActions$.next({
       type: "remove",
       id: node.id
     })

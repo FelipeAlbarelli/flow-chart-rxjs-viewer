@@ -18,7 +18,12 @@ export type CanvaItem = {
     behaviour: Behaviour
 }
 
-export type CanvaStoreActions = {
+export type Connection = {
+    outputId: string, 
+    inputId: string 
+}
+
+export type CanvaStoreAction = {
     type: "add",
     data: CanvaItem,
 } | {
@@ -33,6 +38,23 @@ export type CanvaStoreActions = {
 } | {
     type: "setStore",
     data: Map<string, CanvaItem>,
+}
+
+export type ConnectionAction = {
+    type: "add",
+    data: Connection,
+} | {
+    type: "remove",
+    data: Connection,
+} | {
+    type: "removeAllWithInput",
+    id: string
+} | {
+    type: "removeAllWithOutput",
+    id: string
+} | {
+    type: "load",
+    data: Map< string, Set<string> >
 }
 
 const getStateFromLocalStorage = (key: string): Map<string, CanvaItem> | null => {
@@ -68,9 +90,11 @@ export const canvaStore = ({
 
     const initialState = new Map<string, CanvaItem>();
 
-    const actions$ = new Subject<CanvaStoreActions>();
+    const nodeActions$ = new Subject<CanvaStoreAction>();
 
-    let firstAction: CanvaStoreActions = {
+    const connectionActions$ = new Subject<ConnectionAction>();
+
+    let firstAction: CanvaStoreAction = {
         type: "clear"
     }
 
@@ -84,7 +108,7 @@ export const canvaStore = ({
         }
     }
 
-    const state$ = actions$.pipe(
+    const nodeState$ = nodeActions$.pipe(
         startWith(firstAction),
         scan((state, action) => {
             switch (action.type) {
@@ -117,15 +141,70 @@ export const canvaStore = ({
         share(),
     );
 
-    const items$ = state$.pipe(
+    const connectionState$ = connectionActions$.pipe(
+        scan((state, action) => {
+            switch (action.type) {
+                case "add": {
+                    const { inputId, outputId } = action.data;
+                    const connections = state.get(outputId) ?? new Set<string>();
+                    connections.add(inputId);
+                    state.set(outputId, connections);
+                    return state;
+                }
+                case "remove": {
+                    const { inputId, outputId } = action.data;
+                    const connections = state.get(outputId) ?? new Set<string>();
+                    connections.delete(inputId);
+                    state.set(outputId, connections);
+                    return state;
+                }
+                case "removeAllWithInput": {
+                    for ( const [_index, connectionSet] of state.entries() ) {
+                        connectionSet.delete(action.id);
+                    }
+                    return state;
+                }
+                case "removeAllWithOutput": {
+                    state.delete(action.id);
+                    return state;
+                }
+                case "load": {
+                    state.clear();
+                    for (const [key, connection] of action.data.entries()){
+                        state.set(key, connection)
+                    }
+                    return state;
+                }
+            }
+        }, new Map<string, Set<string>>())
+    )
+
+    const nodes$ = nodeState$.pipe(
         map(state => 
-            Array.from(state.entries(), ([key, item]) => item )
+            Array.from(state.entries(), ([_key, item]) => item )
+        )
+    )
+
+    const connections$ = connectionState$.pipe(
+        map(state => 
+            Array.from(
+                state.entries(), ([inputId, connectionSet]) => 
+                    Array.from(
+                        connectionSet.entries(), 
+                        ([_i, outputId]) => ({
+                            outputId, 
+                            inputId  
+                        })
+                    )
+                
+            ).flat()
         )
     )
 
     return {
-        state$,
-        items$,
-        actions$
+        nodeState$,
+        nodes$,
+        nodeActions$,
+        connections$,
     }
 }
