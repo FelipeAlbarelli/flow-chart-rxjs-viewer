@@ -8,7 +8,7 @@
     </f-background>
     <f-canvas fZoom>
         <f-connection-for-create></f-connection-for-create>
-        @for (node of (canvaItems$ | async); track node.id) {
+        @for (node of cardsService.items(); track node.id) {
             <div
                 class="canva-item"
                 fNode
@@ -43,6 +43,16 @@
                     [fOutputId]="node.id"
                 ></div>
             </div>
+        }
+        @for (conn of cardsService.connections(); track $index) {
+            <f-connection
+                [fReassignDisabled]="true"
+                fType="segment"
+                [fOutputId]="conn.outputId"
+                [fInputId]="conn.inputId"
+            >
+    
+            </f-connection>
         }
     </f-canvas>
 </f-flow>
