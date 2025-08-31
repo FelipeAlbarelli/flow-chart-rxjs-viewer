@@ -9,10 +9,9 @@ import {
   FFlowModule
 } from '@foblex/flow';
 import {generateGuid} from '@foblex/utils';
-import { CanvaItem, canvaStore } from '../../model/canva.store';
 import { CommonModule } from '@angular/common';
 import { IPoint } from '@foblex/2d';
-import { Cards } from '../../services/cards';
+import { CanvaItem, Cards } from '../../services/cards';
 
 @Component({
   selector: 'app-flow-canva',
@@ -61,6 +60,7 @@ export class FlowCanva {
           param: 250,
         },
         position: event.rect,
+        connectedTo: [],
     })
   }
 

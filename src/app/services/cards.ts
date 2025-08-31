@@ -1,4 +1,4 @@
-import { Injectable, OnInit, signal } from '@angular/core';
+import { computed, Injectable, OnInit, Signal, signal } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { skipUntil, Subject } from 'rxjs';
 
@@ -17,7 +17,8 @@ export type CanvaItem = {
       y: number
   },
   text: string,
-  behaviour: Behaviour
+  behaviour: Behaviour,
+  connectedTo: string[]
 }
 
 export type Connection = {
@@ -66,7 +67,13 @@ export class Cards implements OnInit {
 
   items = signal<CanvaItem[]>(this.initialState.items)
 
-  connections = signal<Connection[]>(this.initialState.connections)
+  // connections = signal<Connection[]>(this.initialState.connections)
+  connections: Signal<Connection[]> = computed(() => {
+    return this.items().flatMap(origin => origin.connectedTo?.map(endId => ({
+      outputId: origin.id, 
+      inputId: endId 
+    })))
+  })
 
   items$ = toObservable(this.items);
 
@@ -88,7 +95,12 @@ export class Cards implements OnInit {
 
   removeItem = (itemId: string) => {
     this.items.update(prev => 
-      prev.filter(item => item.id === itemId)
+      prev
+        .filter(item => item.id !== itemId)
+        .map(item =>  ({
+          ...item,
+          connectedTo: item.connectedTo.filter(id => id !== itemId)
+        }))
     )
   }
 
@@ -99,10 +111,12 @@ export class Cards implements OnInit {
   }
 
   addConnection = (conn: Connection) => {
-    this.connections.update(prev => [
-      ...prev,
-      conn
-    ])
+    this.items.update(prev => 
+      prev.map(currItem => currItem.id === conn.outputId ? {
+        ...currItem,
+        connectedTo: [...currItem.connectedTo, conn.inputId]
+      } : currItem)
+    )
   }
 
   ngOnInit(): void {
